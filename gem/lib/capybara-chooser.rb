@@ -9,15 +9,15 @@ module Capybara
       chooser_container = first(:xpath, xpath) if xpath.present?
       chooser_container ||= first('label', text: from).find(:xpath, '..').find '.chooser-container'
 
-      chooser_container.find('.chooser-choice').click
+      chooser_container.find('.chooser-selected').click
 
       if search
-        chooser_input = 'input.chooser-input'
-        find(:xpath, '//body').find(chooser_input).set value
-        page.execute_script(%|$("#{chooser_input}:visible").keyup();|)
+        chooser_search = 'input.chooser-search'
+        find(:xpath, '//body').find(chooser_search).set value
+        page.execute_script(%|$("#{chooser_search}:visible").keyup();|)
       end
 
-      drop_container = search ? '.chooser-results' : '.chooser-drop'
+      drop_container = '.chooser-search-results'
       find(:xpath, '//body').find("#{drop_container} li", text: value).click
 
       fail unless page.has_no_css? '#chooser-drop-mask'
