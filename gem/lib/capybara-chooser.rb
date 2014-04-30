@@ -9,6 +9,7 @@ module Capybara
       chooser_container = first(:xpath, xpath) if xpath.present?
       chooser_container ||= first('label', text: from).find(:xpath, '..').find '.chooser-container'
 
+      chooser_container.has_no_css? '.chooser-mask'
       chooser_container.find('.chooser-field').click
 
       if search
