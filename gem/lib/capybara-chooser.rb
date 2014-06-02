@@ -3,12 +3,13 @@ require 'rspec/core'
 
 module Capybara
   module Chooser
-    def chooser(value, from: nil, xpath: nil, search: false)
+    def chooser(value, from: nil, xpath: nil, search: false, **args)
       fail "Must pass a hash containing 'from' or 'xpath'" unless from.present? || xpath.present?
 
-      chooser_container = first(:xpath, xpath) if xpath.present?
-      chooser_container ||= first('label', text: from).find(:xpath, '..').find '.chooser-container'
+      chooser_container = first(:xpath, xpath, **args) if xpath.present?
+      chooser_container ||= first('label', text: from, **args).find(:xpath, '..').find '.chooser-container'
 
+      chooser_container.has_no_css? '.chooser-mask'
       chooser_container.find('.chooser-field').click
 
       if search
